@@ -14,19 +14,15 @@ let todos: Todo[] = [
   { id: 3, title: "Hono 공부하기", delete_flg: false },
 ];
 
-app.get("/", (c) => {
-  return c.text("Hello Hono!");
-});
-
 /*
  * Todo 목록 얻는 API
  */
-app.get("/api/todos", (c) => c.json(todos.filter((todo) => !todo.delete_flg)));
+app.get("/", (c) => c.json(todos.filter((todo) => !todo.delete_flg)));
 
 /*
  * Todo 등록 API
  */
-app.post("/api/todos", async (c) => {
+app.post("/", async (c) => {
   const { title } = await c.req.json<{ title: string }>();
   if (!title) {
     return c.json({ message: "제목은 필수항목입니다." }, 400);
@@ -40,7 +36,7 @@ app.post("/api/todos", async (c) => {
 /*
  * Todo 변경 API
  */
-app.put("/api/todos/:id", async (c) => {
+app.put("/:id", async (c) => {
   const id = c.req.param("id");
   const index = todos.findIndex((todo) => todo.id === Number(id));
 
@@ -59,7 +55,7 @@ app.put("/api/todos/:id", async (c) => {
 /*
  * Todo 삭제 API
  */
-app.put("/api/todos/:id/delete", async (c) => {
+app.put("/:id/delete", async (c) => {
   const id = c.req.param("id");
   const index = todos.findIndex((todo) => todo.id === Number(id));
 
@@ -72,5 +68,3 @@ app.put("/api/todos/:id/delete", async (c) => {
 });
 
 export default app;
-
-
